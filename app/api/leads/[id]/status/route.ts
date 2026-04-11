@@ -1,28 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '../../../../../lib/prisma'
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { status } = await request.json()
+  const params = await context.params;
+  const { status } = await req.json();
 
-  if (!status || !['new', 'contacted', 'quoted', 'booked', 'won', 'lost'].includes(status)) {
-    return NextResponse.json({ error: 'Valid status is required' }, { status: 400 })
+  if (!status || typeof status !== "string") {
+    return NextResponse.json(
+      { ok: false, error: "Missing or invalid status" },
+      { status: 400 }
+    );
   }
 
-  const updateData: any = { status }
-  if (['booked', 'won', 'lost'].includes(status)) {
-    updateData.nextFollowUpAt = null
-  }
+  const lead = await prisma.lead.update({
+    where: { id: params.id },
+    data: { status },
+  });
 
-  try {
-    const lead = await prisma.lead.update({
-      where: { id: params.id },
-      data: updateData,
-    })
-    return NextResponse.json(lead)
-  } catch (error) {
-    return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
-  }
+  return NextResponse.json({ ok: true, lead });
 }
