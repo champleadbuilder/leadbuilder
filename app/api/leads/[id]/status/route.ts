@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
-  req: Request,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   const params = await context.params;
   const { id } = params;
-  const body = await req.json();
+  const body = await request.json();
 
   const status = body?.status;
 
