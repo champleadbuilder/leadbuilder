@@ -30,6 +30,15 @@ export default function DashboardPage() {
     setLoading(false)
   }
 
+  async function updateStatus(id: string, status: string) {
+    await fetch(`/api/leads/${id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    })
+    fetchLeads() // Refresh the list
+  }
+
   async function seedDatabase() {
     if (!confirm('This will delete all existing leads and add 5 fake ones. Continue?')) return
 
