@@ -15,31 +15,58 @@ export default function EstimatePage() {
     setLoading(true)
     setFeedback('')
 
-    const response = await fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        phone,
-        location,
-        message,
-        source: 'website',
-      }),
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
 
-    const data = await response.json()
-    setLoading(false)
+    try {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[LeadForm] Submitting lead:', { name, phone, location, message, source: 'website' })
+      } else {
+        console.log('[LeadForm] Submitting lead…')
+      }
 
-    if (!response.ok) {
-      setFeedback(data.error || 'Something went wrong')
-      return
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          phone,
+          location,
+          message,
+          source: 'website',
+        }),
+        signal: controller.signal,
+      })
+
+      console.log('[LeadForm] Response status:', response.status)
+
+      const data = await response.json()
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[LeadForm] Response data:', data)
+      }
+
+      if (!response.ok) {
+        setFeedback(data.error || 'Something went wrong. Please try again.')
+        return
+      }
+
+      setFeedback('Lead saved successfully!')
+      setName('')
+      setPhone('')
+      setLocation('')
+      setMessage('')
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.error('[LeadForm] Request timed out after 15 seconds')
+        setFeedback('Request timed out. Please check your connection and try again.')
+      } else {
+        console.error('[LeadForm] Unexpected error:', error)
+        setFeedback('An unexpected error occurred. Please try again.')
+      }
+    } finally {
+      clearTimeout(timeoutId)
+      setLoading(false)
     }
-
-    setFeedback('Lead saved successfully!')
-    setName('')
-    setPhone('')
-    setLocation('')
-    setMessage('')
   }
 
   return (
