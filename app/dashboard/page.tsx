@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 
+// Lead management dashboard component
+
 interface Lead {
   id: string
   name: string
