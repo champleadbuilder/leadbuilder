@@ -9,10 +9,12 @@ export default function EstimatePage() {
   const [message, setMessage] = useState('')
   const [feedback, setFeedback] = useState('')
   const [loading, setLoading] = useState(false)
+  const [completed, setCompleted] = useState(false)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setLoading(true)
+    setCompleted(false)
     setFeedback('')
 
     const response = await fetch('/api/leads', {
@@ -29,9 +31,11 @@ export default function EstimatePage() {
 
     const data = await response.json()
     setLoading(false)
+    setCompleted(true)
 
     if (!response.ok) {
       setFeedback(data.error || 'Something went wrong')
+      setCompleted(false)
       return
     }
 
@@ -92,9 +96,9 @@ export default function EstimatePage() {
         <button
           type="submit"
           disabled={loading}
-          style={{ padding: '12px 16px', borderRadius: 10, background: '#111827', color: 'white', border: 'none' }}
+          style={{ padding: '12px 16px', borderRadius: 10, background: completed ? '#059669' : '#111827', color: 'white', border: 'none' }}
         >
-          {loading ? 'Saving…' : 'Save Lead'}
+          {loading ? 'Saving…' : completed ? 'Completed' : 'Save Lead'}
         </button>
       </form>
 
