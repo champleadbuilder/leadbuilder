@@ -14,7 +14,11 @@ model Lead {
 	address   String?
 	service   String?
 	notes     String?
+	message   String?
+	source    String?
+	location  String?
 	status    String?
+	nextFollowUpAt DateTime?
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt
 }
