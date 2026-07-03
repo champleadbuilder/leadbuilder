@@ -93,7 +93,7 @@ export async function POST(request: Request) {
       }
     }
 
-    if (type === 'invoice.paid' && email) {
+    if (type === 'invoice.paid' && email && obj.billing_reason !== 'subscription_create') {
       const existing = await findByEmail(email)
       if (existing) {
         await prisma.lead.update({
