@@ -12,19 +12,23 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const { name, phone, location, message, source } = body
+  const { name, phone, email, location, message, source, firmName, profession } = body
 
-  if (!name || !phone) {
-    return NextResponse.json({ error: 'Name and phone are required' }, { status: 400 })
+  // B2C leads arrive with phone; B2B licensing leads arrive with email. Either satisfies contactability.
+  if (!name || (!phone && !email)) {
+    return NextResponse.json({ error: 'Name and a phone or email are required' }, { status: 400 })
   }
 
   const lead = await prisma.lead.create({
     data: {
       name,
-      phone,
+      phone: phone || null,
+      email: email || null,
       location: location || null,
       message: message || null,
       source: source || null,
+      firmName: firmName || null,
+      profession: profession || null,
       nextFollowUpAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
     },
   })
