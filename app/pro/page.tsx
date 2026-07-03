@@ -50,6 +50,10 @@ export default function ProPage() {
   } as const;
 
   return (
+    // Explicit page background: the app's default inherits the system theme,
+    // which turns near-black in dark mode and buries the charcoal text.
+    // Brand-correct warm white, forced regardless of prefers-color-scheme.
+    <div style={{ background: "#FDFBF7", minHeight: "100vh", colorScheme: "light" }}>
     <main
       style={{
         maxWidth: 760,
@@ -257,5 +261,6 @@ export default function ProPage() {
         Calmkept — a quiet act of love, now for the professionals families trust.
       </p>
     </main>
+    </div>
   );
 }
