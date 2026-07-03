@@ -117,6 +117,46 @@ export default function ProPage() {
         </li>
       </ol>
 
+      <h2 style={{ fontSize: 22, fontWeight: 500, marginBottom: 12 }}>What it looks like</h2>
+
+      <p style={{ marginBottom: 20 }}>
+        The same binder families already buy — seventeen sections across 72 pages, in a
+        calm design meant to be kept, not filed away.
+      </p>
+
+      <img
+        src="/pro/binder-pages.png"
+        alt="Six sample pages from the Calmkept family emergency binder: cover, medical information, bank accounts, will and trust, final wishes, and child profile pages"
+        style={{ width: "100%", borderRadius: 8, marginBottom: 20, display: "block" }}
+      />
+
+      <div
+        style={{
+          display: "flex",
+          gap: 24,
+          alignItems: "center",
+          flexWrap: "wrap",
+          marginBottom: 40,
+        }}
+      >
+        <img
+          src="/pro/cobrand-sample.png"
+          alt="The co-brand page: Prepared for the clients of your firm, with your name and contact details"
+          style={{
+            width: 280,
+            maxWidth: "100%",
+            borderRadius: 8,
+            border: `1px solid ${sage}`,
+            display: "block",
+          }}
+        />
+        <p style={{ flex: 1, minWidth: 240, margin: 0, fontSize: 17 }}>
+          Every licensed copy carries this page — your name, your contact details, inside
+          the binder your clients&rsquo; families will open when it matters. This is the
+          difference between the retail edition and yours.
+        </p>
+      </div>
+
       <h2 style={{ fontSize: 22, fontWeight: 500, marginBottom: 16 }}>Licenses</h2>
 
       <div style={{ display: "grid", gap: 16, marginBottom: 16 }}>
